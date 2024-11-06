@@ -1,10 +1,12 @@
 from django.db import models
 
+
 class Genre(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
     def __str__(self) -> str:
         return self.name
+
 
 class Actor(models.Model):
     first_name = models.CharField(max_length=255)
@@ -13,14 +15,16 @@ class Actor(models.Model):
     def __str__(self) -> str:
         return f"{self.first_name} {self.last_name}"
 
+
 class Movie(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
-    actors = models.ManyToManyField(Actor, related_name='movies')
-    genres = models.ManyToManyField(Genre, related_name='movies')
+    actors = models.ManyToManyField(Actor, related_name="movies")
+    genres = models.ManyToManyField(Genre, related_name="movies")
 
     def __str__(self) -> str:
         return self.title
+
 
 class CinemaHall(models.Model):
     name = models.CharField(max_length=255)
@@ -28,11 +32,12 @@ class CinemaHall(models.Model):
     seats_in_row = models.IntegerField()
 
     @property
-    def capacity(self):
+    def capacity(self) -> int:
         return self.rows * self.seats_in_row
 
     def __str__(self) -> str:
         return self.name
+
 
 class MovieSession(models.Model):
     show_time = models.DateTimeField()
@@ -40,4 +45,5 @@ class MovieSession(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return f"{self.movie.title} {self.show_time.strftime('%Y-%m-%d %H:%M:%S')}"
+        return (f"{self.movie.title} "
+                f"{self.show_time.strftime("%Y-%m-%d %H:%M:%S")}")
